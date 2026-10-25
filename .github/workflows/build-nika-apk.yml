@@ -33,7 +33,10 @@ jobs:
       - name: Install Android build tools
         run: |
           yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platform-tools" "platforms;android-37" "build-tools;35.0.0" "cmake;3.22.1" "ndk;27.2.12479018"
+          # The current SDK repository publishes API 37 as the versioned
+          # platform package `android-37.0`, while Gradle still consumes it as
+          # compileSdk 37.
+          sdkmanager "platform-tools" "platforms;android-37.0" "build-tools;35.0.0" "cmake;3.22.1" "ndk;27.2.12479018"
 
       - name: Set up Gradle and cache dependencies
         uses: gradle/actions/setup-gradle@v4
