@@ -254,7 +254,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
     onRecentsViewTypeToggle: () -> Unit,
 ) {
     shelves.forEachIndexed { index, shelf ->
-        item(key = shelf.title + index) {
+        item(key = shelf.title + index, contentType = "home-shelf") {
             val openItem: (ShelfItem) -> Unit = { item -> onItemClick(item, shelf.title) }
             if (index == 0 && shelf.title.equals(RECENTS_TITLE, ignoreCase = true)) {
                 RecentShelf(
@@ -287,6 +287,12 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
     }
 }
 
+/** Stable keys keep artwork cards from being torn down when a feed refreshes. */
+private fun shelfItemKey(item: ShelfItem): String =
+    item.videoId?.let { "track:$it" }
+        ?: item.browseId?.let { "browse:$it" }
+        ?: "title:${item.title}:${item.subtitle}"
+
 /** The same four-rows-per-page treatment used by an artist's Top songs. */
 @Composable
 private fun RecentShelf(
@@ -313,7 +319,11 @@ private fun RecentShelf(
                     contentPadding = PaddingValues(horizontal = PAGE_GUTTER),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    items(shelf.items.chunked(RECENT_TRACKS_PER_COLUMN)) { column ->
+                    items(
+                        items = shelf.items.chunked(RECENT_TRACKS_PER_COLUMN),
+                        key = { column -> "recent-column:${column.firstOrNull()?.videoId ?: column.firstOrNull()?.title}" },
+                        contentType = { "recent-column" },
+                    ) { column ->
                         Column(Modifier.width(columnWidth)) {
                             column.forEach { item ->
                                 RecentTrackRow(
@@ -335,7 +345,11 @@ private fun RecentShelf(
                     contentPadding = PaddingValues(horizontal = PAGE_GUTTER),
                     horizontalArrangement = Arrangement.spacedBy(14.dp),
                 ) {
-                    items(shelf.items) { item ->
+                    items(
+                        items = shelf.items,
+                        key = { item -> shelfItemKey(item) },
+                        contentType = { "hero-card" },
+                    ) { item ->
                         HeroCard(
                             item = item,
                             onClick = { onItemClick(item) },
@@ -763,7 +777,11 @@ private fun HeroShelf(
                 contentPadding = PaddingValues(horizontal = PAGE_GUTTER),
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                items(shelf.items) { item ->
+                items(
+                    items = shelf.items,
+                    key = { item -> shelfItemKey(item) },
+                    contentType = { "hero-card" },
+                ) { item ->
                     HeroCard(
                         item = item,
                         onClick = { onItemClick(item) },
@@ -862,7 +880,11 @@ internal fun Shelf(
             horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             leadingCard?.let { card -> item(key = "leading") { card() } }
-            items(shelf.items) { item ->
+            items(
+                items = shelf.items,
+                key = { item -> shelfItemKey(item) },
+                contentType = { "shelf-card" },
+            ) { item ->
                 ShelfCard(
                     item = item,
                     onClick = { onItemClick(item) },
