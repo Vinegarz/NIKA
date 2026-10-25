@@ -4,6 +4,20 @@ on:
   push:
     branches:
       - rebrand/nika-android
+    paths:
+      - 'app/**'
+      - 'shared/**'
+      - 'sharedUi/**'
+      - 'tv/**'
+      - 'wearos/**'
+      - 'native/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/build-nika-apk.yml'
   workflow_dispatch:
 
 permissions:
