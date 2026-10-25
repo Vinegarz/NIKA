@@ -17,7 +17,6 @@ on:
       - 'gradle.properties'
       - 'gradlew'
       - 'gradlew.bat'
-      - '.github/workflows/build-nika-apk.yml'
   workflow_dispatch:
 
 permissions:
