@@ -1,8 +1,8 @@
 /** The web player's production origin. */
-export const PRODUCTION_ORIGIN = 'https://bitchord.in';
+export const PRODUCTION_ORIGIN = 'https://nika-web-rq9.pages.dev';
 
 /** The same site at its Cloudflare Pages address (the production branch's deploy). */
-const PAGES_ORIGIN = 'https://bitchord-8bw.pages.dev';
+const PAGES_ORIGIN = 'https://nika-web-rq9.pages.dev';
 
 /** The Vite dev server (web/app/vite.config.ts pins the port). */
 const DEV_ORIGIN = 'http://localhost:5173';
